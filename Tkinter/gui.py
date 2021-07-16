@@ -6,6 +6,7 @@ class TestOpenCV ( wx.Frame ):
     windowWidth = 500
     windowHeight = 320
 
+    ##建構子
     def __init__( self, parent=None ):
         wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"單一視訊畫面", pos = wx.DefaultPosition, size = wx.Size( self.windowWidth, self.windowHeight), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
@@ -67,9 +68,8 @@ class App(wx.App):
 
         while True:
             ret, frame = cap.read()
-
             if ret == True:
-                # 畫面旋轉 90度
+                # 畫面旋轉 0度
                 srcBGR = self.rot90(frame, 0)
 
                 # wxPython 只能處理 RGB 的圖片，要從 BGR 轉 RGB
@@ -95,7 +95,7 @@ class App(wx.App):
 
             else:
                 break
-
+            
         cap.release()
         cv2.destroyAllWindows()
 

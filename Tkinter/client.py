@@ -2,6 +2,7 @@ import socket
 import cv2
 import numpy
 
+##receive all
 def recvall(sock, count):
     buf = b''
     while count:
@@ -17,6 +18,7 @@ TCP_PORT = 9090
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
 
+##不斷接收資料
 while 1:
     length = recvall(sock,16)
     stringData = recvall(sock, int(length))
