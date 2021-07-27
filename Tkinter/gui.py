@@ -61,10 +61,10 @@ class App(wx.App):
         else :
             raise Exception("Unknown rotation angle({})".format(angle))
         return img
-
+    
     def run(self):
 
-        cap = cv2.VideoCapture(0);
+        cap = cv2.VideoCapture(1);
 
         while True:
             ret, frame = cap.read()
