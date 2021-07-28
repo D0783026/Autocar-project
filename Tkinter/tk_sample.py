@@ -3,40 +3,46 @@ import time
 from PIL import  ImageTk, Image, ImageDraw
 import cv2
 import random
+import socket
+import numpy
 
-captrue = cv2.VideoCapture(0) #開啟相機，0為預設筆電內建相機
-captrue.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')) #設置影像參數
-captrue.set(3,350) #像素
-captrue.set(4,500) #像素
+##receive all
+def recvall(sock, count):
+    buf = b''
+    while count:
+        newbuf = sock.recv(count)
+        if not newbuf: return None
+        buf += newbuf
+        count -= len(newbuf)
+    return buf
 
+TCP_IP = "192.168.43.241"
+TCP_PORT = 9090
+
+sock = socket.socket()
+sock.connect((TCP_IP, TCP_PORT))
 
 img_viode = 'D:\\a.jpg'    #影像存放位置 要改
-
-
-def check():
-    global captrue
-    if captrue.isOpened(): #判斷相機是否有開啟
-        open()
-    else:
-        captrue = cv2.VideoCapture(0) 
-        captrue.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')) #設置影像參數
-        captrue.set(3,350) #像素
-        captrue.set(4,500) #像素
-        open()
         
 
 
 def open():
     global s
-    ret,frame = captrue.read() #取得相機畫面
-    cv2.imwrite(img_viode,frame) #儲存圖片
+    length = recvall(sock,16)
+    stringData = recvall(sock, int(length))
+    data = numpy.fromstring(stringData, dtype='uint8')
+    decimg=cv2.imdecode(data,1)
+    cv2.imshow('SERVER2',decimg)
+    cv2.waitKey(1)
+    cv2.imwrite(img_viode,decimg) #儲存圖片
     img_right = ImageTk.PhotoImage(Image.open(img_viode)) #讀取圖片
     label_right.imgtk=img_right #換圖片
     label_right.config(image=img_right) #換圖片
     s = label_right.after(1, open) #持續執行open方法，1000為1秒
 
 def close():
-    captrue.release() #關閉相機
+    sock.close()
+    cv2.destroyAllWindows()
     label_right.after_cancel(s) #結束拍照
     label_right.config(image=img) #換圖片
 
@@ -54,7 +60,7 @@ img= ImageTk.PhotoImage(Image.open('D:\\畢業專題\\Tkinter\\a.jpg')) #要改
 label_right= tk.Label(top,height=360,width=480,bg ='gray94',fg='blue',image = img) 
 
 #按鈕
-button_1 = tk.Button(top,text = 'open',bd=4,height=4,width=22,bg ='gray94',command =check)
+button_1 = tk.Button(top,text = 'open',bd=4,height=4,width=22,bg ='gray94',command =open)
 button_2 = tk.Button(top,text = 'close',bd=4,height=4,width=22,bg ='gray94',command =close)
 
 #位置
