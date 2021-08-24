@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8-*-
+
 import RPi.GPIO as GPIO
 import curses
 import time
@@ -5,19 +8,19 @@ from curses import wrapper
 
 GPIO.setmode(GPIO.BCM)
 
-RIN1 = 8        #白
-RIN2 = 25       #橘
-RIN3 = 24       #灰
-RIN4 = 23       #紫
-LIN1 = 4        #紅
-LIN2 = 14       #藍
-LIN3 = 15       #黃
+RIN1 = 13       #白
+RIN2 = 16       #橘
+RIN3 = 19       #灰
+RIN4 = 20       #紫
+LIN1 = 15        #紅
+LIN2 = 4       #藍
+LIN3 = 17       #黃
 LIN4 = 18       #綠
 
-ENR_A = 6
-ENR_B = 12
-ENL_A = 2
-ENL_B = 3
+ENR_A = 12
+ENR_B = 21
+ENL_A = 14
+ENL_B = 27
 
 GPIO.setup(RIN1, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(RIN2, GPIO.OUT, initial=GPIO.LOW)
@@ -40,10 +43,10 @@ pwm_R_B = GPIO.PWM(ENR_B,500)  #ENR_B设置为PWM控制
 pwm_L_A = GPIO.PWM(ENL_A,500)  #ENL_A设置为PWM控制
 pwm_L_B = GPIO.PWM(ENL_B,500)  #NL_B设置为PWM控制
 
-pwm_R_A.start(0)
-pwm_R_B.start(0)
-pwm_L_A.start(0)
-pwm_L_B.start(0)
+pwm_R_A.start(50)
+pwm_R_B.start(50)
+pwm_L_A.start(50)
+pwm_L_B.start(50)
 
 
 def Speed_Control(x):
@@ -101,27 +104,27 @@ while True:
        break
 
 # Forward
-    elif ch == 'w':
+    elif ch == 'x':
        Speed_Control(ch)
        GPIO.output(LIN1, GPIO.LOW)
        GPIO.output(LIN2, GPIO.HIGH)
        GPIO.output(LIN3, GPIO.LOW)
        GPIO.output(LIN4, GPIO.HIGH)
-       GPIO.output(RIN1, GPIO.HIGH)
-       GPIO.output(RIN2, GPIO.LOW)
+       GPIO.output(RIN1, GPIO.LOW)
+       GPIO.output(RIN2, GPIO.HIGH)
        GPIO.output(RIN3, GPIO.LOW)
        GPIO.output(RIN4, GPIO.HIGH)
        
 
 # Backward
-    elif ch == 'x':
+    elif ch == 'w':
        Speed_Control(ch)
        GPIO.output(LIN1, GPIO.HIGH)
        GPIO.output(LIN2, GPIO.LOW)
        GPIO.output(LIN3, GPIO.HIGH)
        GPIO.output(LIN4, GPIO.LOW)
-       GPIO.output(RIN1, GPIO.LOW)
-       GPIO.output(RIN2, GPIO.HIGH)
+       GPIO.output(RIN1, GPIO.HIGH)
+       GPIO.output(RIN2, GPIO.LOW)
        GPIO.output(RIN3, GPIO.HIGH)
        GPIO.output(RIN4, GPIO.LOW)
 
@@ -144,8 +147,8 @@ while True:
        GPIO.output(LIN2, GPIO.LOW)
        GPIO.output(LIN3, GPIO.LOW)
        GPIO.output(LIN4, GPIO.LOW)
-       GPIO.output(RIN1, GPIO.HIGH)
-       GPIO.output(RIN2, GPIO.LOW)
+       GPIO.output(RIN1, GPIO.LOW)
+       GPIO.output(RIN2, GPIO.HIGH)
        GPIO.output(RIN3, GPIO.LOW)
        GPIO.output(RIN4, GPIO.HIGH)
 
