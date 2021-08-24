@@ -5,7 +5,22 @@ import RPi.GPIO as GPIO
 import curses
 import time
 from curses import wrapper
+import socket
 
+
+#set socket
+bind_ip = "0.0.0.0"
+bind_port = 9999
+
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+server.bind((bind_ip,bind_port))
+
+server.listen(5)
+
+print ("[*] Listening on %s:%d " % (bind_ip,bind_port))
+
+#setting GPIO
 GPIO.setmode(GPIO.BCM)
 
 RIN1 = 13       #白
@@ -83,74 +98,81 @@ def Speed_Control(x):
 
 
 while True:
-    ch = stdscr.getkey()
-# Quit
-    if ch == 'q':
-       curses.endwin()
-       Speed_Control(ch)
-       
-       GPIO.output(LIN1, GPIO.LOW)     #GPIO17
-       GPIO.output(LIN2, GPIO.LOW)     #GPIO18
-       GPIO.output(LIN3, GPIO.LOW)     #GPIO22
-       GPIO.output(LIN4, GPIO.LOW)     #GPIO23
-       GPIO.output(RIN1, GPIO.LOW)     #GPIO7
-       GPIO.output(RIN2, GPIO.LOW)     #GPIO11
-       GPIO.output(RIN3, GPIO.LOW)     #GPIO25
-       GPIO.output(RIN4, GPIO.LOW)     #GPIO10
-       
-       GPIO.cleanup()       #清除GPIO資料
-      
+    client,addr = server.accept()
+    print ('Connected by ', addr)
+    
+    while True:
+        ch = stdscr.getkey()
+        data = client.recv(1024)
+        print ("Client recv data : %s " % (data))
 
-       break
+        client.send("ACK!".encode())
+        # Quit
+        if ch == 'q':
+            curses.endwin()
+            Speed_Control(ch)
+            
+            GPIO.output(LIN1, GPIO.LOW)     #GPIO17
+            GPIO.output(LIN2, GPIO.LOW)     #GPIO18
+            GPIO.output(LIN3, GPIO.LOW)     #GPIO22
+            GPIO.output(LIN4, GPIO.LOW)     #GPIO23
+            GPIO.output(RIN1, GPIO.LOW)     #GPIO7
+            GPIO.output(RIN2, GPIO.LOW)     #GPIO11
+            GPIO.output(RIN3, GPIO.LOW)     #GPIO25
+            GPIO.output(RIN4, GPIO.LOW)     #GPIO10
+            
+            GPIO.cleanup()       #清除GPIO資料
+            
 
-# Forward
-    elif ch == 'x':
-       Speed_Control(ch)
-       GPIO.output(LIN1, GPIO.LOW)
-       GPIO.output(LIN2, GPIO.HIGH)
-       GPIO.output(LIN3, GPIO.LOW)
-       GPIO.output(LIN4, GPIO.HIGH)
-       GPIO.output(RIN1, GPIO.LOW)
-       GPIO.output(RIN2, GPIO.HIGH)
-       GPIO.output(RIN3, GPIO.LOW)
-       GPIO.output(RIN4, GPIO.HIGH)
-       
+            break
 
-# Backward
-    elif ch == 'w':
-       Speed_Control(ch)
-       GPIO.output(LIN1, GPIO.HIGH)
-       GPIO.output(LIN2, GPIO.LOW)
-       GPIO.output(LIN3, GPIO.HIGH)
-       GPIO.output(LIN4, GPIO.LOW)
-       GPIO.output(RIN1, GPIO.HIGH)
-       GPIO.output(RIN2, GPIO.LOW)
-       GPIO.output(RIN3, GPIO.HIGH)
-       GPIO.output(RIN4, GPIO.LOW)
+        # Forward
+        elif ch == 'x':
+            Speed_Control(ch)
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.HIGH)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.HIGH)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.HIGH)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.HIGH)
+        
 
-# Turn Right
-    elif ch == 'd':
-       Speed_Control(ch)
-       GPIO.output(LIN1, GPIO.LOW)
-       GPIO.output(LIN2, GPIO.HIGH)
-       GPIO.output(LIN3, GPIO.LOW)
-       GPIO.output(LIN4, GPIO.HIGH)
-       GPIO.output(RIN1, GPIO.LOW)
-       GPIO.output(RIN2, GPIO.LOW)
-       GPIO.output(RIN3, GPIO.LOW)
-       GPIO.output(RIN4, GPIO.LOW)
+        # Backward
+        elif ch == 'w':
+            Speed_Control(ch)
+            GPIO.output(LIN1, GPIO.HIGH)
+            GPIO.output(LIN2, GPIO.LOW)
+            GPIO.output(LIN3, GPIO.HIGH)
+            GPIO.output(LIN4, GPIO.LOW)
+            GPIO.output(RIN1, GPIO.HIGH)
+            GPIO.output(RIN2, GPIO.LOW)
+            GPIO.output(RIN3, GPIO.HIGH)
+            GPIO.output(RIN4, GPIO.LOW)
 
-# Turn Left
-    elif ch == 'a':
-       Speed_Control(ch)
-       GPIO.output(LIN1, GPIO.LOW)
-       GPIO.output(LIN2, GPIO.LOW)
-       GPIO.output(LIN3, GPIO.LOW)
-       GPIO.output(LIN4, GPIO.LOW)
-       GPIO.output(RIN1, GPIO.LOW)
-       GPIO.output(RIN2, GPIO.HIGH)
-       GPIO.output(RIN3, GPIO.LOW)
-       GPIO.output(RIN4, GPIO.HIGH)
+        # Turn Right
+        elif float(data) >= 0.5:
+            Speed_Control(ch)
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.HIGH)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.HIGH)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.LOW)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.LOW)
 
-
-GPIO.cleanup()       #清除GPIO資料
+        # Turn Left
+        elif float(data) <= -0.5:
+            Speed_Control(ch)
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.LOW)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.LOW)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.HIGH)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.HIGH)
+            
+        GPIO.cleanup()       #清除GPIO資料

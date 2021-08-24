@@ -142,9 +142,10 @@ while done == False:
     cmd1 = str(joystick.get_axis(0))
     s.send(cmd1.encode())
     
+    """
     cmd2 = str(joystick.get_axis(1))
     s.send(cmd2.encode())
-
+    """
 
 
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
