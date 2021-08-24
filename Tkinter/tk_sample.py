@@ -16,8 +16,8 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
-TCP_IP = "192.168.43.241"
-TCP_PORT = 9091
+TCP_IP = "172.20.10.4"
+TCP_PORT = 9090
 
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))

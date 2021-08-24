@@ -107,6 +107,7 @@ while True:
         print ("Client recv data : %s " % (data))
 
         client.send("ACK!".encode())
+        '''
         # Quit
         if ch == 'q':
             curses.endwin()
@@ -125,10 +126,10 @@ while True:
             
 
             break
-
+        '''
         # Forward
-        elif ch == 'x':
-            Speed_Control(ch)
+        if float(data) >= 2.0 and float(data) <= 2.5:
+            
             GPIO.output(LIN1, GPIO.LOW)
             GPIO.output(LIN2, GPIO.HIGH)
             GPIO.output(LIN3, GPIO.LOW)
@@ -140,8 +141,8 @@ while True:
         
 
         # Backward
-        elif ch == 'w':
-            Speed_Control(ch)
+        elif float(data) >= 3.5:
+            
             GPIO.output(LIN1, GPIO.HIGH)
             GPIO.output(LIN2, GPIO.LOW)
             GPIO.output(LIN3, GPIO.HIGH)
@@ -152,8 +153,8 @@ while True:
             GPIO.output(RIN4, GPIO.LOW)
 
         # Turn Right
-        elif float(data) >= 0.5:
-            Speed_Control(ch)
+        elif float(data) >= 0.5 and float(data) <= 1.0:
+            
             GPIO.output(LIN1, GPIO.LOW)
             GPIO.output(LIN2, GPIO.HIGH)
             GPIO.output(LIN3, GPIO.LOW)
@@ -165,7 +166,7 @@ while True:
 
         # Turn Left
         elif float(data) <= -0.5:
-            Speed_Control(ch)
+            
             GPIO.output(LIN1, GPIO.LOW)
             GPIO.output(LIN2, GPIO.LOW)
             GPIO.output(LIN3, GPIO.LOW)
@@ -174,5 +175,14 @@ while True:
             GPIO.output(RIN2, GPIO.HIGH)
             GPIO.output(RIN3, GPIO.LOW)
             GPIO.output(RIN4, GPIO.HIGH)
-            
-        GPIO.cleanup()       #清除GPIO資料
+        
+        else:  
+            GPIO.output(LIN1, GPIO.LOW)     #GPIO17
+            GPIO.output(LIN2, GPIO.LOW)     #GPIO18
+            GPIO.output(LIN3, GPIO.LOW)     #GPIO22
+            GPIO.output(LIN4, GPIO.LOW)     #GPIO23
+            GPIO.output(RIN1, GPIO.LOW)     #GPIO7
+            GPIO.output(RIN2, GPIO.LOW)     #GPIO11
+            GPIO.output(RIN3, GPIO.LOW)     #GPIO25
+            GPIO.output(RIN4, GPIO.LOW)     #GPIO10
+            #GPIO.cleanup()       #清除GPIO資料

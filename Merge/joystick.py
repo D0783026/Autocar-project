@@ -1,9 +1,11 @@
 import socket
 import pygame
+import time
+import threading
 
 # define HOST POST
-HOST = '192.168.43.241'
-PORT = 9000
+HOST = '172.20.10.4'
+PORT = 9999
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
@@ -16,6 +18,13 @@ WHITE = (255, 255, 255)
 # It has nothing to do with the joysticks, just outputting the
 # information.
 
+def test1():
+    cmd2 = str(joystick.get_axis(1) + 3.01)
+    s.send(cmd2.encode())
+
+def test2():
+    cmd1 = str(joystick.get_axis(0))
+    s.send(cmd1.encode())
 
 class TextPrint:
     def __init__(self):
@@ -139,15 +148,16 @@ while done == False:
         textPrint.unindent()
 
     # SENDING DATA
-    cmd1 = str(joystick.get_axis(0))
-    s.send(cmd1.encode())
-    
-    """
-    cmd2 = str(joystick.get_axis(1))
-    s.send(cmd2.encode())
-    """
+    t1 = threading.Thread(target=test1)
+    t1.start()
 
+    # 延時一會兒，確保執行緒t1中的事情能做
+    time.sleep(1)
 
+    t2 = threading.Thread(target=test2)
+    t2.start()
+
+    time.sleep(1)
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
     # Go ahead and update the screen with what we've drawn.
