@@ -17,7 +17,7 @@ def recvall(sock, count):
     return buf
 
 TCP_IP = "192.168.43.241"
-TCP_PORT = 9091
+TCP_PORT = 9090
 
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
@@ -45,10 +45,6 @@ def close():
     label_right.after_cancel(s) #結束拍照
     label_right.config(image=img) #換圖片
 
-def send():
-    sock.send("TEST!".encode())
-
-
 #創建一個視窗
 top = tk.Tk() 
 #視窗名稱
@@ -69,5 +65,5 @@ button_2 = tk.Button(top,text = 'close',bd=4,height=4,width=22,bg ='gray94',comm
 #位置
 label_right.grid(row=1,column=0,padx=20, pady=20, sticky="nw") 
 button_1.grid(row=1, column=0, padx=100, pady=400, sticky="nw")  
-button_2.grid(row=1, column=0, padx=300, pady=400, sticky="nw")
+button_2.grid(row=1, column=0, padx=300, pady=400, sticky="nw") 
 top.mainloop() #執行視窗

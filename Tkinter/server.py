@@ -28,8 +28,7 @@ while True:
 
         ret, frame = capture.read()
         decimg=cv2.imdecode(data,1)
-        cv2.imshow('SERVER2',decimg)
         cv2.waitKey(30)
 
     conn.close()
-    cv2.destroyAllWindows()
+    cv2.destroyAllWindows() 
