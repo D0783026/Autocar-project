@@ -139,8 +139,11 @@ while done == False:
         textPrint.unindent()
 
     # SENDING DATA
-    cmd = str(joystick.get_axis(0))
-    s.send(cmd.encode())
+    cmd1 = str(joystick.get_axis(0))
+    s.send(cmd1.encode())
+    
+    cmd2 = str(joystick.get_axis(1))
+    s.send(cmd2.encode())
 
 
 
