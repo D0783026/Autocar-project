@@ -1,21 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8-*-
-
 from enum import Enum
 import RPi.GPIO as GPIO
-import socket
-
-#set socket
-bind_ip = "0.0.0.0"
-bind_port = 9999
-
-server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
-server.bind((bind_ip,bind_port))
-
-server.listen(5)
-
-print ("[*] Listening on %s:%d " % (bind_ip,bind_port))
 
 #setting GPIO
 GPIO.setmode(GPIO.BCM)
@@ -57,12 +41,6 @@ pwm_R_A.start(50)
 pwm_R_B.start(50)
 pwm_L_A.start(50)
 pwm_L_B.start(50)
-
-class State(Enum):
-    Forward = 1
-    Left = 2
-
-state = 1
 
 #控制前後
 def control_forward(x):
