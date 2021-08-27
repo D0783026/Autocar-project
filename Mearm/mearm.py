@@ -28,7 +28,7 @@ if __name__ == '__main__':
                     print('結束程式')
                     flag=1
                     break
-                dc = angle_to_duty_cycle(angle) 
+                dc = angle_to_duty_cycle(angle)
                 pwm.ChangeDutyCycle(dc)
                 print('角度={: >3}, 工作週期={:.2f}'.format(angle, dc))
                 time.sleep(0.5)
