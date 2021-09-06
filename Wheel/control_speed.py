@@ -64,75 +64,79 @@ class State(Enum):
 
 state = 1
 
-#控制前後
-def control_forward(x):
 
-    #forward
-    if x <= -0.5:
-        GPIO.output(LIN1, GPIO.LOW)
-        GPIO.output(LIN2, GPIO.HIGH)
-        GPIO.output(LIN3, GPIO.LOW)
-        GPIO.output(LIN4, GPIO.HIGH)
-        GPIO.output(RIN1, GPIO.LOW)
-        GPIO.output(RIN2, GPIO.HIGH)
-        GPIO.output(RIN3, GPIO.LOW)
-        GPIO.output(RIN4, GPIO.HIGH)
-        return True
+while True:
+    client,addr = server.accept()
+    print ('Connected by ', addr)
+    
+    while True:
+        data = client.recv(1024)
+        print ("Client recv data : %s " % (data))
 
-    #backward
-    elif x >= 0.5:
-        GPIO.output(LIN1, GPIO.HIGH)
-        GPIO.output(LIN2, GPIO.LOW)
-        GPIO.output(LIN3, GPIO.HIGH)
-        GPIO.output(LIN4, GPIO.LOW)
-        GPIO.output(RIN1, GPIO.HIGH)
-        GPIO.output(RIN2, GPIO.LOW)
-        GPIO.output(RIN3, GPIO.HIGH)
-        GPIO.output(RIN4, GPIO.LOW)
-        return True
+        state += 1
 
-    else: 
-        return False
+        if state == State.Forward:
+            float1 = float(data)
+        elif state == State.Left:
+            float2 = float(data)
+            state = 1
+        
+        if float1 >= 0.8 and float1 <= 1.2 and float2 >= 2.8 and float2 <= 3.2:
+            GPIO.output(LIN1, GPIO.LOW)     #GPIO17
+            GPIO.output(LIN2, GPIO.LOW)     #GPIO18
+            GPIO.output(LIN3, GPIO.LOW)     #GPIO22
+            GPIO.output(LIN4, GPIO.LOW)     #GPIO23
+            GPIO.output(RIN1, GPIO.LOW)     #GPIO7
+            GPIO.output(RIN2, GPIO.LOW)     #GPIO11
+            GPIO.output(RIN3, GPIO.LOW)     #GPIO25
+            GPIO.output(RIN4, GPIO.LOW)     #GPIO10
+            #GPIO.cleanup()       #清除GPIO資料
 
+        # Forward
+        if float(data) >= 2.0 and float(data) <= 2.5:
+            
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.HIGH)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.HIGH)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.HIGH)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.HIGH)
+        
 
-#控制左右
-def control_left(x):
+        # Backward
+        elif float(data) >= 3.5:
+            
+            GPIO.output(LIN1, GPIO.HIGH)
+            GPIO.output(LIN2, GPIO.LOW)
+            GPIO.output(LIN3, GPIO.HIGH)
+            GPIO.output(LIN4, GPIO.LOW)
+            GPIO.output(RIN1, GPIO.HIGH)
+            GPIO.output(RIN2, GPIO.LOW)
+            GPIO.output(RIN3, GPIO.HIGH)
+            GPIO.output(RIN4, GPIO.LOW)
 
-    #left
-    if x <= -0.5:
-        GPIO.output(LIN1, GPIO.LOW)
-        GPIO.output(LIN2, GPIO.LOW)
-        GPIO.output(LIN3, GPIO.LOW)
-        GPIO.output(LIN4, GPIO.LOW)
-        GPIO.output(RIN1, GPIO.LOW)
-        GPIO.output(RIN2, GPIO.HIGH)
-        GPIO.output(RIN3, GPIO.LOW)
-        GPIO.output(RIN4, GPIO.HIGH)
-        return True
+        # Turn Right
+        elif float(data) >= 0.5 and float(data) <= 1.0:
+            
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.HIGH)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.HIGH)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.LOW)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.LOW)
 
-    #right
-    elif x >= 0.5:
-        GPIO.output(LIN1, GPIO.LOW)
-        GPIO.output(LIN2, GPIO.HIGH)
-        GPIO.output(LIN3, GPIO.LOW)
-        GPIO.output(LIN4, GPIO.HIGH)
-        GPIO.output(RIN1, GPIO.LOW)
-        GPIO.output(RIN2, GPIO.LOW)
-        GPIO.output(RIN3, GPIO.LOW)
-        GPIO.output(RIN4, GPIO.LOW)
-        return True
-
-    else: 
-        return False
-
-
-#停止輪胎動作
-def stop():
-    GPIO.output(LIN1, GPIO.LOW)     #GPIO17
-    GPIO.output(LIN2, GPIO.LOW)     #GPIO18
-    GPIO.output(LIN3, GPIO.LOW)     #GPIO22
-    GPIO.output(LIN4, GPIO.LOW)     #GPIO23
-    GPIO.output(RIN1, GPIO.LOW)     #GPIO7
-    GPIO.output(RIN2, GPIO.LOW)     #GPIO11
-    GPIO.output(RIN3, GPIO.LOW)     #GPIO25
-    GPIO.output(RIN4, GPIO.LOW)     #GPIO10
+        # Turn Left
+        elif float(data) <= -0.5:
+            
+            GPIO.output(LIN1, GPIO.LOW)
+            GPIO.output(LIN2, GPIO.LOW)
+            GPIO.output(LIN3, GPIO.LOW)
+            GPIO.output(LIN4, GPIO.LOW)
+            GPIO.output(RIN1, GPIO.LOW)
+            GPIO.output(RIN2, GPIO.HIGH)
+            GPIO.output(RIN3, GPIO.LOW)
+            GPIO.output(RIN4, GPIO.HIGH)

@@ -8,8 +8,8 @@ RIN1 = 13       #白
 RIN2 = 16       #橘
 RIN3 = 19       #灰
 RIN4 = 20       #紫
-LIN1 = 15        #紅
-LIN2 = 4       #藍
+LIN1 = 15       #紅
+LIN2 = 4        #藍
 LIN3 = 17       #黃
 LIN4 = 18       #綠
 
@@ -55,6 +55,7 @@ def control_forward(x):
         GPIO.output(RIN2, GPIO.HIGH)
         GPIO.output(RIN3, GPIO.LOW)
         GPIO.output(RIN4, GPIO.HIGH)
+        print('forward')
         return True
 
     #backward

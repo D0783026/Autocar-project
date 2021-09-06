@@ -1,8 +1,6 @@
 import tkinter as tk #大小寫要注意,如果小寫不行就改大寫
-import time
 from PIL import  ImageTk, Image, ImageDraw
 import cv2
-import random
 import socket
 import numpy
 
