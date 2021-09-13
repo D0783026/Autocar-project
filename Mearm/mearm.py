@@ -5,7 +5,7 @@ import curses
 CONTROL_PIN = 14
 PWM_FREQ = 50
 STEP=1
- 
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(CONTROL_PIN, GPIO.OUT)
  
