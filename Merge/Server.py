@@ -1,7 +1,6 @@
 import socket
 import cv2
 import numpy
-from enum import Enum
 import controlWheel as w
 
 
@@ -21,11 +20,6 @@ encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
 
 print ("[*] Listening on %s:%d " % (TCP_IP,TCP_PORT))
 
-class State(Enum):
-    Forward = 1
-    Left = 2
-
-state = 1
 flag1 = False
 flag2 = False
 
@@ -56,16 +50,12 @@ while True:
         num3 = float(cut[10:13])
         num4 = float(cut[14:17])
 
+        #控制車子移動
         flag1 = w.control_forward(num1)
         print('forward: ' + str(num1))
         flag2 = w.control_left(num2)
         print("left: " + str(num2))
 
-
+        #車子靜止
         if flag1 == False and flag2 == False:
             w.stop()
-
-
-
-client.close()
-cv2.destroyAllWindows()

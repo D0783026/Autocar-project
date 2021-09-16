@@ -108,20 +108,4 @@ button_2.grid(row=1, column=1, pady=5, sticky="nw")
 button_3.grid(row=1, column=2, pady=5, sticky="nw")
 
 label_1.grid(row=0, column=3, pady = 20, sticky="nw")
-
-def info(title):
-    print(title)
-    print('module name:', __name__)
-    print('parent process:', os.getppid())
-    print('process id:', os.getpid())
-
-def f(name):
-    info('function f')
-    print('hello', name)
-    top.mainloop()
-
-if __name__ == '__main__':
-    info('main line')
-    p = Process(target=f, args=('bob',))
-    p.start()
-    p.join()
+top.mainloop()
