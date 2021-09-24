@@ -9,12 +9,22 @@ Original file is located at
 
 import cv2
 cam = cv2.VideoCapture(0)
+cam1 = cv2.VideoCapture(1)
 while True:
+  num = input('輸入你想開的攝像頭:')
   ret, img = cam.read()
-  if img is None:
-    break
-  vis = img.copy()
-  cv2.imshow('getCamera', vis)
+  ret1, img1 = cam1.read()
+
+  if num == '0':
+    vis = img.copy()
+
+    cv2.imshow('getCamera', vis)
+  
+  if num == '1':
+    vis = img1.copy()
+
+    cv2.imshow('getCamera', vis)
+    
   if 0XFF & cv2.waitKey(5) == 27:
     break
 cv2.destroyAllWindows()
