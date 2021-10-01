@@ -38,23 +38,22 @@ TCP_PORT = 9000
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
 
-
 img_viode = 'D:\\a.jpg' #圖片存放位置
         
 
 
 def open():
     global s
+    length = recvall(sock,16)
+    stringData = recvall(sock, int(length))
+    data = numpy.fromstring(stringData, dtype='uint8')
+    decimg=cv2.imdecode(data,1)
+    cv2.waitKey(1)
+    cv2.imwrite(img_viode,decimg) #儲存圖片
+    img_right = ImageTk.PhotoImage(Image.open(img_viode)) #讀取圖片
+    label_right.imgtk=img_right #換圖片
     state = 0
     if state == 0:
-        length = recvall(sock,16)
-        stringData = recvall(sock, int(length))
-        data = numpy.fromstring(stringData, dtype='uint8')
-        decimg=cv2.imdecode(data,1)
-        cv2.waitKey(1)
-        cv2.imwrite(img_viode,decimg) #儲存圖片
-        img_right = ImageTk.PhotoImage(Image.open(img_viode)) #讀取圖片
-        label_right.imgtk=img_right #換圖片
         label_right.config(image=img_right) #換圖片
         if joystick.get_button(5) == 0:
             flag = 1
@@ -62,6 +61,7 @@ def open():
             if joystick.get_button(5) == 1 :
                 state = 1
                 flag = 0
+    #按下button5關掉鏡頭
     if state == 1:
         label_right.config(image=img) #換圖片
         if joystick.get_button(5) == 0:
@@ -128,14 +128,17 @@ def sendText():
             elif joystick.get_axis(0) >= 0.5:
                 label_4['text'] = 'turn Right'
             else:
-                label_4['text'] = 'Nothing'
+                label_4['text'] = 'Stopped'
 
         sock.send(cmd.encode())
 
-def changeLable():
+def openStick():
     global label_2
     label_2['text'] = 'Opened'
 
+def closeStick():
+    global label_2
+    label_2['text'] = 'Closed'
 
 #創建一個視窗
 top = tk.Tk()
@@ -154,29 +157,27 @@ div2 = tk.Frame(top,height=60, width=480)
 div3 = tk.Frame(top,height=460, width= 35, bg = 'green')
 
 div1.grid(column=0,row=0, padx=pad,pady=pad, sticky=align_mode)
-div2.grid(column=0, row=1,columnspan=3, padx=pad, pady=pad, sticky=align_mode)
+div2.grid(column=0, row=1,columnspan=2, padx=pad, pady=pad, sticky=align_mode)
 div3.grid(column=1, row=0,rowspan=2, padx=pad,pady=pad,sticky=align_mode)
 
 #用label來放照片
 label_right= tk.Label(div1,height = 360,width=480, bg ='gray94',fg='blue',image = img) 
 
 #按鈕
-button_1 = tk.Button(div2,text = 'open Camera',bd=4,height=4,width=15,bg ='gray94',command =open)
-button_2 = tk.Button(div2,text = 'close Camera',bd=4,height=4,width=15,bg ='gray94',command =close)
-button_3 = tk.Button(div2,text = 'open Controller',bd=4,height=4,width=15,bg ='gray94',command =changeLable)
+button_1 = tk.Button(div2,text = 'open Controller',bd=4,height=4,width=15,bg ='gray94',command =openStick)
+button_2 = tk.Button(div2,text = 'close Controller',bd=4,height=4,width=15,bg ='gray94',command =closeStick)
 
 #小車狀態
 label_1 = tk.Label(div3, text = 'Controller : ',font=(16),width=20, bg='yellow',anchor='w')
 label_2 = tk.Label(div3,text = 'Closed',font=('Arial', 16),width=20, bg='yellow')
 label_3 = tk.Label(div3, text = 'Car State : ',font=(16),width=20, bg='yellow',anchor='w')
-label_4 = tk.Label(div3,text = 'Nothing',font=('Arial', 16),width=20, bg='yellow')
+label_4 = tk.Label(div3,text = 'Stopped',font=('Arial', 16),width=20, bg='yellow')
 
 #位置
 label_right.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
 
 button_1.grid(row=0, column=0,padx=40, sticky=align_mode)
 button_2.grid(row=0, column=1, sticky=align_mode)
-button_3.grid(row=0, column=2,padx=40, sticky=align_mode)
 
 label_1.grid(row=0,column=0,sticky=align_mode)
 label_2.grid(row=1, column=0,pady=pad, sticky=align_mode)
