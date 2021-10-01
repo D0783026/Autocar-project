@@ -1,13 +1,4 @@
-import socket
 import pygame
-
-# define HOST POST
-HOST = '192.168.43.105'
-PORT = 9999
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
-
 # Define some colors
 BLACK = (0,   0,   0)
 WHITE = (255, 255, 255)
@@ -135,14 +126,6 @@ while done == False:
             hat = joystick.get_hat(i)
             textPrint.print(screen, "Hat {} value: {}".format(i, str(hat)))
         textPrint.unindent()
-
-        textPrint.unindent()
-
-    # SENDING DATA
-    cmd = str(joystick.get_axis(i))
-    s.send(cmd.encode())
-    data = s.recv(1024).decode()
-    print("server send : %s " % (data))
 
 
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
