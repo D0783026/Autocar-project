@@ -39,8 +39,8 @@ def open_all():
     
     
     
-def angle_to_duty_cycle(angle=0):
-    duty_cycle = (0.05 * PWM_FREQ) + (0.19 * PWM_FREQ * angle / 180)
+def angle_to_duty_cycle(angle):
+    duty_cycle = float(angle) /10 + 2.5
     return duty_cycle
 
 
