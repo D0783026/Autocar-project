@@ -52,31 +52,8 @@ def open():
     cv2.imwrite(img_viode,decimg) #儲存圖片
     img_right = ImageTk.PhotoImage(Image.open(img_viode)) #讀取圖片
     label_right.imgtk=img_right #換圖片
-    state = 0
-    if state == 0:
-        label_right.config(image=img_right) #換圖片
-        if joystick.get_button(5) == 0:
-            flag = 1
-        if flag == 1:
-            if joystick.get_button(5) == 1 :
-                state = 1
-                flag = 0
-    #按下button5關掉鏡頭
-    if state == 1:
-        label_right.config(image=img) #換圖片
-        if joystick.get_button(5) == 0:
-            flag = 1
-        if flag == 1:
-            if joystick.get_button(5) == 1:
-                state = 0
-                flag = 0
+    label_right.config(image=img_right) #換圖片
     s = label_right.after(1, open) #持續執行open方法，1000為1秒
-
-def close():
-    if joystick.get_button(5) == 1 :
-        label_right.after_cancel(s) #結束拍照
-        label_right.config(image=img) #換圖片
-
 
 
 def sendText():
@@ -116,7 +93,7 @@ def sendText():
         print('cmd : ' + cmd)
         
         #要按open controller才能操作
-        if label_2['text'] == 'Closed':
+        '''if label_2['text'] == 'Closed':
             cmd = '0.000.000.000.000000'
         else:
             if joystick.get_axis(1) <= -0.5:
@@ -128,16 +105,17 @@ def sendText():
             elif joystick.get_axis(0) >= 0.5:
                 label_4['text'] = 'turn Right'
             else:
-                label_4['text'] = 'Stopped'
+                label_4['text'] = 'Stopped'''
 
         sock.send(cmd.encode())
+        time.sleep(0.05)
 
 def openStick():
     global label_2
     label_2['text'] = 'Opened'
 
 def closeStick():
-    global label_2
+    global label_2,label_4
     label_2['text'] = 'Closed'
 
 #創建一個視窗
