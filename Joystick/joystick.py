@@ -1,13 +1,17 @@
-import socket
 import pygame
-
+<<<<<<< HEAD
+import time
+import threading
+'''
 # define HOST POST
-HOST = '192.168.43.105'
-PORT = 9999
+HOST = '172.20.10.4'
+PORT = 9090
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
+s.connect((HOST, PORT))'''
 
+=======
+>>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
 # Define some colors
 BLACK = (0,   0,   0)
 WHITE = (255, 255, 255)
@@ -16,7 +20,7 @@ WHITE = (255, 255, 255)
 # It has nothing to do with the joysticks, just outputting the
 # information.
 
-
+'''
 class TextPrint:
     def __init__(self):
         self.reset()
@@ -36,16 +40,16 @@ class TextPrint:
         self.x += 10
 
     def unindent(self):
-        self.x -= 10
+        self.x -= 10'''
 
 
 pygame.init()
 
 # Set the width and height of the screen [width,height]
-size = [500, 700]
-screen = pygame.display.set_mode(size)
+#size = [500, 700]
+#screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption("My Game")
+#pygame.display.set_caption("My Game")
 
 # Loop until the user clicks the close button.
 done = False
@@ -57,7 +61,7 @@ clock = pygame.time.Clock()
 pygame.joystick.init()
 
 # Get ready to print
-textPrint = TextPrint()
+#textPrint = TextPrint()
 
 # -------- Main Program Loop -----------
 while done == False:
@@ -84,20 +88,21 @@ while done == False:
     # DRAWING STEP
     # First, clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
-    screen.fill(WHITE)
-    textPrint.reset()
+    #screen.fill(WHITE)
+    #textPrint.reset()
 
     # Get count of joysticks
     joystick_count = pygame.joystick.get_count()
 
-    textPrint.print(screen, "Number of joysticks: {}".format(joystick_count))
-    textPrint.indent()
+    #textPrint.print(screen, "Number of joysticks: {}".format(joystick_count))
+    #textPrint.indent()
 
     # For each joystick:
+    
     for i in range(joystick_count):
         joystick = pygame.joystick.Joystick(i)
         joystick.init()
-
+        '''
         textPrint.print(screen, "Joystick {}".format(i))
         textPrint.indent()
 
@@ -115,7 +120,6 @@ while done == False:
             axis = joystick.get_axis(i)
             textPrint.print(screen, "Axis {} value: {:>6.3f}".format(i, axis))
         textPrint.unindent()
-
         buttons = joystick.get_numbuttons()
         textPrint.print(screen, "Number of buttons: {}".format(buttons))
         textPrint.indent()
@@ -136,19 +140,45 @@ while done == False:
             textPrint.print(screen, "Hat {} value: {}".format(i, str(hat)))
         textPrint.unindent()
 
-        textPrint.unindent()
-
+<<<<<<< HEAD
+        textPrint.unindent()'''
     # SENDING DATA
-    cmd = str(joystick.get_axis(i))
-    s.send(cmd.encode())
-    data = s.recv(1024).decode()
-    print("server send : %s " % (data))
 
+
+    cmd2 = str(joystick.get_axis(1)) #control forward and backward
+    cmd2 = cmd2[0:4]
+    print('cmd2 : ' + cmd2)
+    if cmd2 == '0.0':
+        cmd2 = cmd2 + '0'
+
+    cmd1 = str(joystick.get_axis(0)) #control left and right
+    cmd1 = cmd1[0:4]
+    if cmd1 == '0.0':
+        cmd1 = cmd1 + '0'
+
+    cmd3 = str(joystick.get_axis(2))
+    cmd3 = cmd3[0:4]
+    if cmd3 == '0.0':
+            cmd3 = cmd3 + '0'
+
+    cmd4 = str(joystick.get_axis(3))
+    cmd4 = cmd4[0:4]
+    if cmd4 == '0.0':
+            cmd4 = cmd4 + '0'
+
+
+    cmd = cmd1 + cmd2 + cmd3 + cmd4
+    print(cmd1 + '|' + cmd2 + '|' + cmd3 + '|' + cmd4 )
+    print('cmd : ' + cmd)
+    s.send(cmd.encode())
+
+=======
+>>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
 
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
     # Go ahead and update the screen with what we've drawn.
-    pygame.display.flip()
+    #pygame.display.flip()
 
     # Limit to 20 frames per second
     clock.tick(20)

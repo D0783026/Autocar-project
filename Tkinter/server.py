@@ -15,6 +15,7 @@ encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
 
 print ("[*] Listening on %s:%d " % (TCP_IP,TCP_PORT))
 
+
 while True:
     conn, addr = s.accept()
     print ('Connected by ', addr)
@@ -31,4 +32,4 @@ while True:
         cv2.waitKey(30)
 
     conn.close()
-    cv2.destroyAllWindows() 
+    cv2.destroyAllWindows()

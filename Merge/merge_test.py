@@ -1,3 +1,3 @@
 import subprocess
 
-subprocess.run("python3 joystick.py & python3 tk_sample.py",shell = True)
+subprocess.run("python3 joystick.py & python3 cameraGUI.py",shell = True)
