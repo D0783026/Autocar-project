@@ -1,5 +1,5 @@
-import socket
 import pygame
+<<<<<<< HEAD
 import time
 import threading
 '''
@@ -10,6 +10,8 @@ PORT = 9090
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))'''
 
+=======
+>>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
 # Define some colors
 BLACK = (0,   0,   0)
 WHITE = (255, 255, 255)
@@ -138,6 +140,7 @@ while done == False:
             textPrint.print(screen, "Hat {} value: {}".format(i, str(hat)))
         textPrint.unindent()
 
+<<<<<<< HEAD
         textPrint.unindent()'''
     # SENDING DATA
 
@@ -169,6 +172,8 @@ while done == False:
     print('cmd : ' + cmd)
     s.send(cmd.encode())
 
+=======
+>>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
 
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 

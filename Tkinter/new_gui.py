@@ -1,6 +1,5 @@
 import wx
 import cv2
-import time
 import numpy
 import socket
 

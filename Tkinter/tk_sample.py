@@ -1,8 +1,6 @@
 import tkinter as tk #大小寫要注意,如果小寫不行就改大寫
-import time
 from PIL import  ImageTk, Image, ImageDraw
 import cv2
-import random
 import socket
 import numpy
 
@@ -16,8 +14,8 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
-TCP_IP = "192.168.43.241"
-TCP_PORT = 9091
+TCP_IP = "172.20.10.4"
+TCP_PORT = 9090
 
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))

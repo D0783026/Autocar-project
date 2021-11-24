@@ -46,6 +46,7 @@ def angle_to_duty_cycle(angle):
 
 
 
+<<<<<<< HEAD
 
 
 def Base(x):
@@ -154,3 +155,35 @@ def control_Scissor(but_X,but_B):
     
     
 
+=======
+if __name__ == '__main__':
+    flag=0
+    ch = input()
+    while True:
+        if ch=='j':
+            for angle in range(90,180,STEP):
+                if ch=='p':
+                    print('結束程式')
+                    flag=1
+                    break
+                dc = angle_to_duty_cycle(angle)
+                pwm.ChangeDutyCycle(dc)
+                print('角度={: >3}, 工作週期={:.2f}'.format(angle, dc))
+                time.sleep(0.5)
+        elif ch=='l':
+            for angle in range(90,-1,STEP):
+                if ch=='p':
+                    print('結束程式')
+                    flag=1
+                    break
+                dc = angle_to_duty_cycle(angle) 
+                pwm.ChangeDutyCycle(dc)
+                print('角度={: >3}, 工作週期={:.2f}'.format(angle, dc))
+                time.sleep(0.5)
+               
+        if flag==0:
+            break;
+
+    pwm.stop()
+    GPIO.cleanup()
+>>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
