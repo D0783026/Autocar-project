@@ -131,7 +131,7 @@ def sendText():
                 label_4['text'] = 'Stopped'
 
         sock.send(cmd.encode())
-
+        time.sleep(0.01)
 def openStick():
     global label_2
     label_2['text'] = 'Opened'
