@@ -10,10 +10,10 @@ CONTROL_PIN_Z = 22
 CONTROL_PIN_S = 23  #夾子
 PWM_FREQ = 50
 
-angle_X=90
-angle_Y=90
-angle_Z=90
-angle_S=0
+angle_X=108.0
+angle_Y=18.0
+angle_Z=72.0
+angle_S=140.0
 
 
 
@@ -31,159 +31,153 @@ pwm_S = GPIO.PWM(CONTROL_PIN_S, PWM_FREQ)
 def open_all():
    # global pwm_X, pwm_Y, pwm_Z, pwm_S
     print('ok')
+    angle_X=108.0
+    angle_Y=18.0
+    angle_Z=72.0
+    angle_S=140.0
+    pwm_Y.start(0)
+    pwm_X.start(0)
+    pwm_Z.start(0)
+    pwm_S.start(0)
     
-    pwm_Y.start(100)
-    pwm_X.start(100)
-    pwm_Z.start(100)
-    pwm_S.start(100)
+    pwm_Y.ChangeDutyCycle(3.5)
+    pwm_X.ChangeDutyCycle(8.5)
+    pwm_Z.ChangeDutyCycle(6.5)
+    pwm_S.ChangeDutyCycle(10.3)
+    time.sleep(1)
     
+    pwm_Y.ChangeDutyCycle(0)
+    pwm_X.ChangeDutyCycle(0)
+    pwm_Z.ChangeDutyCycle(0)
+    pwm_S.ChangeDutyCycle(0)
     
+def angle_to_duty_cycle(angle=0):
+    duty_cycle = (0.05 * PWM_FREQ) + (0.19 * PWM_FREQ * angle / 180)
     
-def angle_to_duty_cycle(angle):
-    duty_cycle = float(angle) /10 + 2.5
+    pwm_X.ChangeDutyCycle(2.5 + 10 * angle_X / 180)
+        
+    pwm_X.ChangeDutyCycle(2.5 + float(angle_X/10.0))
     return duty_cycle
 
 
-
-
-<<<<<<< HEAD
-
+step = 2.0
 
 def Base(x):
     global angle_X
     
     if x <= -0.5:
-        dc = angle_to_duty_cycle(angle_X) 
-        pwm_X.ChangeDutyCycle(dc)
-        dc=0
         
-        if angle_X>=180:
+        if angle_X + step < 170:
+            angle_X += step
+            print(angle_X)
+        elif angle_X + step >=170:
+            print(angle_X)
             pass
-        else:
-            angle_X+=3
+        
+        pwm_X.ChangeDutyCycle(2.5 + 10 * angle_X / 180)
+        
         return True
         
     elif x >= 0.5:
-        dc = angle_to_duty_cycle(angle_X) 
-        pwm_X.ChangeDutyCycle(dc)
-        dc=0
         
-        if angle_X<=0:
+        if angle_X - step > 10:
+            angle_X -= step
+            print(angle_X)
+        elif angle_X - step <= 10:
+            print(angle_X)
             pass
-        else:
-            angle_X-=3
+        
+        pwm_X.ChangeDutyCycle(2.5 + 10 * angle_X / 180)
+        
         return True
     
     else:
+        pwm_X.ChangeDutyCycle(0)
         return False
-    
     
     
 def control_Forward_Backward(x):
     global angle_Y
-    if x <= -0.5: 
-        dc = angle_to_duty_cycle(angle_Y) 
-        pwm_Y.ChangeDutyCycle(dc)
-        dc=0
-        if angle_Y>=180:
+
+    if x <= -0.5:
+        
+        if angle_Y + step < 170:
+            angle_Y += step
+        elif angle_Y + step >=170:
             pass
-        else:
-            angle_Y+=3
+        
+        pwm_Y.ChangeDutyCycle(2.5 + 10 * angle_Y / 180)
+        
         return True
-    
+        
     elif x >= 0.5:
         
-        dc = angle_to_duty_cycle(angle_Y) 
-        pwm_Y.ChangeDutyCycle(dc)
-        dc=0
-        if angle_Y<=0:
+        if angle_Y - step > 10:
+            angle_Y -= step
+        elif angle_Y - step <= 10:
             pass
-        else:
-            angle_Y-=3
+        
+        pwm_Y.ChangeDutyCycle(2.5 + 10 * angle_Y / 180)
+        
         return True
+    
     else:
+        pwm_Y.ChangeDutyCycle(0)
         return False
     
     
-    
-
 def control_High_Low(but_Y,but_A):
     global angle_Z
-    if but_Y == 1 and but_A == 0: 
-        dc = angle_to_duty_cycle(angle_Z) 
-        pwm_Z.ChangeDutyCycle(dc)
-        dc=0
-        if angle_Z>=180:
+    if but_Y == 1:
+        if angle_Z < 170:
+            angle_Z = angle_Z + 3
+        elif angle_Z >= 170:
             pass
-        else:
-            angle_Z+=3
+        
+        pwm_Z.ChangeDutyCycle(2.5 + 10 * angle_Z / 180)       
         return True
     
-    elif but_A == 1 and but_Y == 0:
-        dc = angle_to_duty_cycle(angle_Z) 
-        pwm_Z.ChangeDutyCycle(dc)     
-        dc=0
-        if angle_Z<=0:
+    elif but_A == 1:
+        if angle_Z > 10:
+            angle_Z = angle_Z - 3
+        elif angle_Z <= 10:
             pass
-        else:
-            angle_Z-=3
+        
+        pwm_Z.ChangeDutyCycle(2.5 + 10 * angle_Z / 180)
+        
+        
         return True
-    else:
+    
+    elif but_A == 0 and but_Y == 0:
+        pwm_Z.ChangeDutyCycle(0) 
         return False
     
     
-
+stateS = 0
 def control_Scissor(but_X,but_B):
-    global angle_S
-    if but_X == 1 : 
-        angle_S=180
-        dc = angle_to_duty_cycle(angle_S) 
-        pwm_S.ChangeDutyCycle(dc)
-        dc=0
+    global state,stateS
+    if but_X == 1 and but_B == 0 : 
+        
+        pwm_S.ChangeDutyCycle(2.5 + 10 * 0 / 180)
+        #time.sleep(0.02)
+        
+        stateS = stateS + 1
+        
         return True
     
-    elif but_B == 1:
-        angle_S=0
-        dc = angle_to_duty_cycle(angle_S) 
-        pwm_S.ChangeDutyCycle(dc)       
-        dc=0
+    elif but_B == 1 and but_X == 0:
+        pwm_S.ChangeDutyCycle(2.5 + 10 * 140 / 180)
+        #time.sleep(0.02)
+        stateS = stateS + 1
+        
         return True
-    else:
+    
+    elif but_B == 0 and but_X == 0:
+        pwm_S.ChangeDutyCycle(0)
+        stateS = 0
         return False
     
     
     
     
 
-=======
-if __name__ == '__main__':
-    flag=0
-    ch = input()
-    while True:
-        if ch=='j':
-            for angle in range(90,180,STEP):
-                if ch=='p':
-                    print('結束程式')
-                    flag=1
-                    break
-                dc = angle_to_duty_cycle(angle)
-                pwm.ChangeDutyCycle(dc)
-                print('角度={: >3}, 工作週期={:.2f}'.format(angle, dc))
-                time.sleep(0.5)
-        elif ch=='l':
-            for angle in range(90,-1,STEP):
-                if ch=='p':
-                    print('結束程式')
-                    flag=1
-                    break
-                dc = angle_to_duty_cycle(angle) 
-                pwm.ChangeDutyCycle(dc)
-                print('角度={: >3}, 工作週期={:.2f}'.format(angle, dc))
-                time.sleep(0.5)
-               
-        if flag==0:
-            break;
-
-    pwm.stop()
-    GPIO.cleanup()
->>>>>>> a98567ce6e5a01251e0bd50ee6949578beb980ab
