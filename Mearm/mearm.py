@@ -69,9 +69,9 @@ def Base(x):
         
         if angle_X + step < 170:
             angle_X += step
-            print(angle_X)
+            
         elif angle_X + step >=170:
-            print(angle_X)
+            
             pass
         
         pwm_X.ChangeDutyCycle(2.5 + 10 * angle_X / 180)
