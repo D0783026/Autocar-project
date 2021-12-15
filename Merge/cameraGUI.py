@@ -35,7 +35,7 @@ def recvall(sock, count):
 TCP_IP = "172.20.10.4"
 TCP_PORT = 9000
 
-sock = socket.socket()
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((TCP_IP, TCP_PORT))
 
 img_viode = 'D:\\a.jpg' #圖片存放位置
