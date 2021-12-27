@@ -84,40 +84,39 @@ def sendText():
     while True:
 
         # SENDING DATA
-        cmd2 = str(joystick.get_axis(1)) #control forward and backward
-        cmd2 = cmd2[0:4]
-        print('cmd2 : ' + cmd2)
-        if cmd2 == '0.0':
-            cmd2 = cmd2 + '0'
+        control_wheel_FandB= str(joystick.get_axis(1)) #control wheel forward and backward
+        control_wheel_FandB = control_wheel_FandB[0:4]
+        if control_wheel_FandB == '0.0':
+            control_wheel_FandB = control_wheel_FandB + '0'
 
-        cmd1 = str(joystick.get_axis(0)) #control left and right
-        cmd1 = cmd1[0:4]
-        if cmd1 == '0.0':
-            cmd1 = cmd1 + '0'
+        control_wheel_LandR = str(joystick.get_axis(0)) #control wheel left and right
+        control_wheel_LandR = control_wheel_LandR[0:4]
+        if control_wheel_LandR == '0.0':
+            control_wheel_LandR = control_wheel_LandR + '0'
 
-        cmd3 = str(joystick.get_axis(2))
-        cmd3 = cmd3[0:4]
-        if cmd3 == '0.0':
-                cmd3 = cmd3 + '0'
+        control_Mearm_LandR = str(joystick.get_axis(2)) #control Mearm left and right
+        control_Mearm_LandR  = control_Mearm_LandR [0:4]
+        if control_Mearm_LandR  == '0.0':
+                control_Mearm_LandR  = control_Mearm_LandR  + '0'
 
-        cmd4 = str(joystick.get_axis(3))
-        cmd4 = cmd4[0:4]
-        if cmd4 == '0.0':
-                cmd4 = cmd4 + '0'
+        control_Mearm_FandB = str(joystick.get_axis(3)) #control Mearm forward and backward
+        control_Mearm_FandB = control_Mearm_FandB[0:4]
+        if control_Mearm_FandB == '0.0':
+                control_Mearm_FandB = control_Mearm_FandB + '0'
 
         
-        but_Y = str(joystick.get_button(3))
-        but_A = str(joystick.get_button(0))
-        but_X = str(joystick.get_button(2))
-        but_B = str(joystick.get_button(1))
+        but_Y = str(joystick.get_button(3)) #control Mearm up
+        but_A = str(joystick.get_button(0)) #control Mearm down
+        but_X = str(joystick.get_button(2)) #control Mearm's clip open
+        but_B = str(joystick.get_button(1)) #control Mearm's clip close
 
-        cmd = cmd1 + cmd2 + cmd3 + cmd4 + but_Y + but_A + but_X + but_B
-        print(cmd1 + '|' + cmd2 + '|' + cmd3 + '|' + cmd4  + '|' + but_Y + '|' + but_A)
-        print('cmd : ' + cmd)
+        Signal = control_wheel_LandR + control_wheel_FandB + control_Mearm_LandR  + control_Mearm_FandB + but_Y + but_A + but_X + but_B
+        print(control_wheel_LandR + '|' + control_wheel_FandB + '|' + control_Mearm_LandR  + '|' + control_Mearm_FandB + '|' + but_Y + '|' + but_A)
+        print('Signal: ' + Signal)
         
         #要按open controller才能操作
         if label_2['text'] == 'Closed':
-            cmd = '0.000.000.000.000000'
+            Signal = '0.000.000.000.000000'
         else:
             if joystick.get_axis(1) <= -0.5:
                 label_4['text'] = 'Forward'
@@ -130,7 +129,7 @@ def sendText():
             else:
                 label_4['text'] = 'Stopped'
 
-        sock.send(cmd.encode())
+        sock.send(Signal.encode())
         time.sleep(0.01)
 def openStick():
     global label_2
